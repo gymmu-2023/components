@@ -1,3 +1,4 @@
+import "./components.css"
 export default function Video({url}) {
   return (
     <center>

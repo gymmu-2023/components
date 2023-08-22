@@ -1,13 +1,13 @@
 import {renderToString} from "react-dom/server"
 import "./components.css"
-export default function Code({children}) {
+export default function LCode({content}) {
   
   return (
       <pre style={{
-        whiteSpace: 'pre-line'
+        whiteSpace: 'pre-wrap'
       }}>
     <code>
-        {renderToString(children)}
+        {content}
     </code>
       </pre>
   )

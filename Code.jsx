@@ -4,19 +4,17 @@ import "./components.css"
 import hljs from "highlight.js"
 import { useEffect, useRef } from "react"
 
-export default function Code({children}) {
+export default function Code({content, language}) {
 
   const code = useRef(null)
   useEffect(() => {
-    console.log(code.current)
     hljs.highlightElement(code.current)
-
   }, [])
   
   return (
       <pre>
-        <code ref={code} className="language-html">
-          {renderToString(children)}
+        <code ref={code} className={`language-${language}`}>
+          {content}
         </code>
       </pre>
   )

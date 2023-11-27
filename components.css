@@ -22,8 +22,15 @@ code {
   margin-top: 50px;
   margin-bottom: 50px;
   background-color: rgb(61, 61, 61);
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 30px;
+  padding-bottom: 50px;
+}
+
+@media only screen and (min-width: 1200px) {
+  .example {
+    padding-left: calc(50vw - 600px);
+    padding-right: calc(50vw - 600px);
+  }
 }
 
 .example > h3 {

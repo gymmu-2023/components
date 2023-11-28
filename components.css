@@ -19,6 +19,7 @@ code {
 .example {
   border-left: 5px solid forestgreen;
   padding-left: 20px;
+  padding-right: 15px;
   margin-top: 50px;
   margin-bottom: 50px;
   background-color: rgb(61, 61, 61);

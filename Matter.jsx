@@ -9,7 +9,9 @@ export default function Matter() {
     Render = matter.Render,
     Runner = matter.Runner,
     Bodies = matter.Bodies,
-    Composite = matter.Composite
+    Composite = matter.Composite,
+    MouseConstraint = matter.MouseConstraint,
+    Mouse = matter.Mouse
 
   // create an engine
   const engine = Engine.create()
@@ -28,6 +30,46 @@ export default function Matter() {
 
     // add all of the bodies to the world
     Composite.add(engine.world, [boxA, boxB, ground])
+    // add mouse control
+    var mouse = Mouse.create(render.canvas),
+      mouseConstraint = MouseConstraint.create(engine, {
+        mouse: mouse,
+        constraint: {
+          // allow bodies on mouse to rotate
+          angularStiffness: 0,
+          render: {
+            visible: false,
+          },
+        },
+      })
+
+    Composite.add(engine.world, mouseConstraint)
+
+    // add new body on rightclick
+    render.canvas.addEventListener("contextmenu", (event) => {
+      event.preventDefault()
+      // Add a bouncy ball
+      const body = Bodies.circle(event.offsetX, event.offsetY, 50, {
+        restitution: 0.99,
+        render: {
+          fillStyle: "red",
+        },
+      })
+      Composite.add(engine.world, body)
+    })
+
+    // add new static body on middleclick
+    render.canvas.addEventListener("mousedown", (event) => {
+      if (event.button === 1) {
+        const body = Bodies.rectangle(event.offsetX, event.offsetY, 50, 50, {
+          isStatic: true,
+        })
+        Composite.add(engine.world, body)
+      }
+    })
+
+    // keep the mouse in sync with rendering
+    render.mouse = mouse
 
     // run the renderer
     Render.run(render)

@@ -83,7 +83,14 @@ export default function Matter() {
 
   return (
     <>
-      <div ref={matterElement}></div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}>
+        <div ref={matterElement}></div>
+      </div>
     </>
   )
 }

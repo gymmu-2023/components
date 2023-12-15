@@ -17,72 +17,71 @@ let render = null
 let player = null
 let goal = null
 
-function createWorld(engine) {
-  const worldString = `     p
-b           b
-b           b
-b           b
-b           b
-b           b
-b           b
-b          gb
-b        bbbb
-b           b
-b           b
-bbbbbbbbbbbbb
-`
-    .split("\n")
-    .forEach((line, y) => {
-      line.split("").forEach((char, x) => {
-        if (char === "p") {
-          player = Bodies.rectangle(
-            x * tileSize,
-            y * tileSize,
-            tileSize,
-            tileSize,
-            {
-              restitution: 0.7,
-              render: { fillStyle: "darkblue" },
-              collisionFilter: { mask: 0x0001 },
-            },
-          )
-          Composite.add(engine.world, player)
-        } else if (char === "b") {
-          const block = Bodies.rectangle(
-            x * tileSize,
-            y * tileSize,
-            tileSize,
-            tileSize,
-            {
-              isStatic: true,
-              render: { fillStyle: "red" },
-              collisionFilter: { category: 0x0001 },
-            },
-          )
-          Composite.add(engine.world, block)
-        } else if (char === "g") {
-          goal = Bodies.rectangle(
-            x * tileSize,
-            y * tileSize,
-            tileSize,
-            tileSize,
-            {
-              isStatic: true,
-              render: { fillStyle: "yellow" },
-              collisionFilter: { category: 0x0002 },
-            },
-          )
-          Composite.add(engine.world, goal)
-        }
-      })
-    })
+function Player(x, y, props) {
+  return Bodies.rectangle(x * tileSize, y * tileSize, tileSize, tileSize, {
+    restitution: 20,
+    mass: 2,
+    ...props,
+    render: { fillStyle: "darkblue" },
+    collisionFilter: { mask: 0x0001 },
+  })
 }
-createWorld(engine)
 
-export default function MatterScene() {
+function BouncyBlock(x, y) {
+  return Bodies.rectangle(x * tileSize, y * tileSize, tileSize, tileSize, {
+    restitution: 2,
+    render: { fillStyle: "green" },
+    collisionFilter: { category: 0x0001 },
+  })
+}
+
+function Block(x, y) {
+  return Bodies.rectangle(x * tileSize, y * tileSize, tileSize, tileSize, {
+    isStatic: true,
+    render: { fillStyle: "red" },
+    collisionFilter: { category: 0x0001 },
+  })
+}
+
+function Goal(x, y) {
+  return Bodies.rectangle(x * tileSize, y * tileSize, tileSize, tileSize, {
+    isStatic: true,
+    render: { fillStyle: "yellow" },
+    collisionFilter: { category: 0x0002 },
+  })
+}
+
+function createWorld(engine, world, playerProps) {
+  world.split("\n").forEach((line, y) => {
+    line.split("").forEach((char, x) => {
+      if (char === "p") {
+        player = Player(x, y, playerProps)
+        Composite.add(engine.world, player)
+      } else if (char === "b") {
+        Composite.add(engine.world, Block(x, y))
+      } else if (char === "B") {
+        Composite.add(engine.world, BouncyBlock(x, y))
+      } else if (char === "g") {
+        goal = Goal(x, y)
+        Composite.add(engine.world, goal)
+      }
+    })
+  })
+}
+
+/**
+ * Initializes and controls a Matter.js scene for rendering animations.
+ *
+ * @return {JSX.Element} The canvas element for rendering the scene.
+ */
+export default function MatterScene({ world, playerProps }) {
   const canvas = useRef(null)
   const frame = useCurrentFrame()
   const { fps } = useVideoConfig()
+
+  useEffect(() => {
+    createWorld(engine, world, playerProps)
+  }, [])
 
   useEffect(() => {
     if (render) return

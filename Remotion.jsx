@@ -16,6 +16,50 @@ function Intro() {
   )
 }
 
+import { interpolate, useCurrentFrame, useVideoConfig } from "remotion"
+
+export function MorphingTitleSequence() {
+  const frame = useCurrentFrame()
+  const { fps, durationInFrames } = useVideoConfig()
+
+  // Calculate progress ranging from 0 to 1
+  const progress = interpolate(frame, [0, durationInFrames], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  })
+
+  // Determine the text content based on the progress
+  const text = progress < 0.5 ? "Hello World" : "Hi There"
+
+  // Style interpolation for the morph effect
+  const fontSize = interpolate(progress, [0, 0.5, 1], [40, 60, 40], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  })
+
+  return (
+    <Video>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100%",
+        }}>
+        <h2
+          style={{
+            color: "red",
+            textAlign: "center",
+            fontSize: `${fontSize}px`,
+            opacity: 1 - progress,
+          }}>
+          {text}
+        </h2>
+      </div>
+    </Video>
+  )
+}
+
 export default function RPlayer({ videoComponent }) {
   return (
     <>
@@ -29,7 +73,7 @@ export default function RPlayer({ videoComponent }) {
         <Player
           style={{ width: "640px" }}
           component={videoComponent || Intro}
-          durationInFrames={2 * 30}
+          durationInFrames={5 * 30} // Duration is now 5 seconds at 30 fps
           compositionWidth={1280}
           compositionHeight={720}
           fps={30}

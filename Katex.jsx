@@ -6,7 +6,7 @@ export default function Math({ children }) {
   const katexElement = useRef(null)
 
   useEffect(() => {
-    katex.render(katexElement.current.textContent, katexElement.current, {
+    katex.render(children, katexElement.current, {
       throwOnError: false,
     })
   }, [katexElement])
@@ -17,11 +17,12 @@ export function DisplayMath({ children }) {
   const katexElement = useRef(null)
 
   useEffect(() => {
+    console.log(children)
     katex.render(children, katexElement.current, {
       displayMode: true,
       throwOnError: false,
     })
-  }, [katexElement, children])
+  }, [katexElement])
 
   return (
     <div ref={katexElement} style={{ textAlign: "center" }}>

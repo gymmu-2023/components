@@ -2,53 +2,62 @@ import React, { useRef, useEffect, useCallback, useState } from "react"
 import MonacoEditor from "react-monaco-editor"
 
 export default function NotebookCell() {
-  const [script, setScript] = useState("const ball = { x: 100, y: 100 }")
+  const [objects, setObjects] = useState({
+    ball: {
+      x: 100,
+      y: 100,
+      radius: 10,
+      dx: 5,
+      dy: 5,
+    },
+  })
+  const [script, setScript] = useState(JSON.stringify(objects, null, 2))
 
   const canvasRef = useRef(null)
-  const editorRef = useRef(null)
+  const requestRef = useRef(null)
 
-  useEffect(() => {
+  const update = () => {
+    Object.entries(objects).forEach(([key, entry]) => {
+      entry.x += entry.dx
+      entry.y += entry.dy
+    })
+    setObjects((old) => old)
+  }
+
+  const animationLoop = () => {
+    update()
+    draw()
+    requestRef.current = requestAnimationFrame(animationLoop)
+  }
+
+  const draw = () => {
     const canvas = canvasRef.current
     const context = canvas.getContext("2d")
+    context.clearRect(0, 0, canvas.width, canvas.height)
 
-    const ball = { x: 100, y: 100, radius: 10 }
+    Object.entries(objects).forEach(([key, entry]) => {
+      context.beginPath()
+      context.arc(entry.x, entry.y, entry.radius, 0, 2 * Math.PI)
+      context.fillStyle = "white"
+      context.fill()
+      context.closePath()
+    })
+  }
 
-    // Additional canvas setup and drawing code can go here
-    context.beginPath()
-    context.arc(ball.x, ball.y, ball.radius, 0, 2 * Math.PI)
-    context.fillStyle = "white"
-    context.fill()
-    context.closePath()
+  useEffect(() => {
+    requestRef.current = requestAnimationFrame(animationLoop)
+    return () => cancelAnimationFrame(requestRef.current)
   }, [canvasRef.current])
 
   const handlePlayClick = () => {
     // Logic to handle play button click
     //eval(script)
 
-    console.log("execute script")
-
-    eval(`
-
-    const canvas = canvasRef.current
-    const context = canvas.getContext("2d")
-
-    console.log(canvas, context)
-
-    ${script}
-
-    console.log(ball)
-
-    context.beginPath()
-    context.arc(ball.x, ball.y, ball.radius, 0, 2 * Math.PI)
-    context.fillStyle = "white"
-    context.fill()
-    context.closePath()
-
-    console.log("execute script done")
-
-    `)
-
-    console.log(ball)
+    setObjects((_) => {
+      cancelAnimationFrame(requestRef.current)
+      requestRef.current = requestAnimationFrame(animationLoop)
+      return JSON.parse(script)
+    })
   }
 
   const handleEditorChange = (value) => {
@@ -63,7 +72,6 @@ export default function NotebookCell() {
         justifyContent: "space-between",
       }}>
       <MonacoEditor
-        ref={editorRef}
         language="javascript"
         value={script}
         height="300"

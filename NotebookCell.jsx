@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback, useState } from "react"
+import React, { useRef, useEffect, useState } from "react"
 import MonacoEditor from "react-monaco-editor"
 
 export default function NotebookCell() {
@@ -20,6 +20,26 @@ export default function NotebookCell() {
     Object.entries(objects).forEach(([key, entry]) => {
       entry.x += entry.dx
       entry.y += entry.dy
+
+      if (entry.x + entry.radius > canvasRef.current.width) {
+        entry.x = canvasRef.current.width - entry.radius
+        entry.dx = -entry.dx
+      }
+
+      if (entry.x - entry.radius < 0) {
+        entry.x = entry.radius
+        entry.dx = -entry.dx
+      }
+
+      if (entry.y + entry.radius > canvasRef.current.height) {
+        entry.y = canvasRef.current.height - entry.radius
+        entry.dy = -entry.dy
+      }
+
+      if (entry.y - entry.radius < 0) {
+        entry.y = entry.radius
+        entry.dy = -entry.dy
+      }
     })
     setObjects((old) => old)
   }
@@ -37,8 +57,8 @@ export default function NotebookCell() {
 
     Object.entries(objects).forEach(([key, entry]) => {
       context.beginPath()
-      context.arc(entry.x, entry.y, entry.radius, 0, 2 * Math.PI)
-      context.fillStyle = "white"
+      context.arc(entry.x, entry.y, entry.radius || 10, 0, 2 * Math.PI)
+      context.fillStyle = entry.color || "white"
       context.fill()
       context.closePath()
     })
@@ -50,18 +70,17 @@ export default function NotebookCell() {
   }, [canvasRef.current])
 
   const handlePlayClick = () => {
-    // Logic to handle play button click
-    //eval(script)
+    cancelAnimationFrame(requestRef.current)
 
     setObjects((_) => {
-      cancelAnimationFrame(requestRef.current)
-      requestRef.current = requestAnimationFrame(animationLoop)
       return JSON.parse(script)
     })
+
+    requestRef.current = requestAnimationFrame(animationLoop)
   }
 
   const handleEditorChange = (value) => {
-    setScript(value)
+    setScript((_) => value)
   }
 
   return (
@@ -77,6 +96,7 @@ export default function NotebookCell() {
         height="300"
         theme="vs-dark"
         onChange={handleEditorChange}
+        automaticLayout={true}
       />
 
       <button onClick={() => handlePlayClick()}>Play</button>

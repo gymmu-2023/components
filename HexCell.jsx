@@ -65,9 +65,10 @@ export default function HexCell() {
                     ref={outputRef}
                     style={{
                         border: "1px solid black",
-                        width: "300px",
+                        width: "320px",
                         height: "300px",
-                        marginRight: "1em"
+                        marginRight: "1em",
+                        overflowY: "scroll"
                     }}>
                     {hexy(hex, format)}
                 </pre>

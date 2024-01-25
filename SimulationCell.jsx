@@ -43,7 +43,7 @@ export default function SimulationCell() {
 
             return entry
         })
-        setObjects(newObjects)
+        setObjects((_) => newObjects)
     }
 
     const animationLoop = () => {
@@ -71,16 +71,23 @@ export default function SimulationCell() {
         return () => cancelAnimationFrame(requestRef.current)
     }, [canvasRef.current])
 
-    const handlePlayClick = () => {
+    const handleUpdateClick = () => {
+        cancelAnimationFrame(requestRef.current)
 
-        setObjects((_) => {
-            cancelAnimationFrame(requestRef.current)
-            requestRef.current = requestAnimationFrame(animationLoop)
-            const json = JSON.parse(script)
-            console.log(json)
-            return json
+        setObjects((old) => {
+            try {
+                const json = JSON.parse(script)
+                return json
+            } catch (e) {
+                console.error(e)
+                alert("Es gibt einen Fehler im JSON. Prüfen Sie die Syntax.")
+                return old
+            }
         })
-
+    }
+    const handlePlayClick = () => {
+        cancelAnimationFrame(requestRef.current)
+        requestRef.current = requestAnimationFrame(animationLoop)
     }
 
     const handleEditorChange = (value) => {
@@ -93,6 +100,7 @@ export default function SimulationCell() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
+                width: "100%"
             }}>
             <MonacoEditor
                 language="json"
@@ -103,7 +111,15 @@ export default function SimulationCell() {
                 automaticLayout={true}
             />
 
-            <button onClick={() => handlePlayClick()}>Play</button>
+            <div style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+            }}>
+                <button onClick={() => handleUpdateClick()}>Update</button>
+                <button onClick={() => handlePlayClick()}>Play</button>
+
+            </div>
             <canvas
                 ref={canvasRef}
                 width="300px"

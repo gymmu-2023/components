@@ -1,6 +1,4 @@
-import React, { useRef, useEffect, useState } from "react"
-import MonacoEditor from "react-monaco-editor"
-import { hexy } from "hexy"
+import React, { useState } from "react"
 
 function padWithZeros(bin) {
     let padding = ""
@@ -20,7 +18,7 @@ function strToBin(str) {
 export default function XORCell() {
     const [input, setInput] = useState("abc")
     const [inputBin, setInputBin] = useState(strToBin(input))
-    const [key, setKey] = useState("abc")
+    const [key, setKey] = useState("012")
     const [keyBin, setKeyBin] = useState(strToBin(key))
 
     const [output, setOutput] = useState("")

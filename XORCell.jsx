@@ -2,21 +2,25 @@ import React, { useRef, useEffect, useState } from "react"
 import MonacoEditor from "react-monaco-editor"
 import { hexy } from "hexy"
 
+function padWithZeros(bin) {
+    let padding = ""
+    for (let i = 0; i < 8 - bin.length; i++) {
+        padding += "0"
+    }
+    return padding + bin
+}
+
 function strToBin(str) {
     return str.split("").map((char) => {
         const tmp = char.charCodeAt(0).toString(2)
-        let padding = ""
-        for( let i=0; i < 8-tmp.length; i++) {
-            padding += "0"
-        }
-        return padding + tmp
+        return padWithZeros(tmp)
     }).join(" ")
 }
 
 export default function XORCell() {
     const [input, setInput] = useState("abc")
     const [inputBin, setInputBin] = useState(strToBin(input))
-    const [key, setKey] = useState("key")
+    const [key, setKey] = useState("abc")
     const [keyBin, setKeyBin] = useState(strToBin(key))
 
     const [output, setOutput] = useState("")
@@ -42,24 +46,28 @@ export default function XORCell() {
     }
 
     const calculate = (inputBin, keyBin) => {
-        const inp = parseInt(inputBin.replace(/ /, ""), 2)
-        const key = parseInt(keyBin.replace(/ /, ""), 2)
-        console.log(inp.toString(2), key.toString(2))
-        const xor = (inp ^ key).toString(2)
-        const lenDiff = input.length - xor.length
-        let padding = ""
-        for (let i = 0; i < lenDiff; i++) {
-            padding += "0"
-        }
-        const arr = padding + xor
-        const res = []
-        for (let i = 0; i < arr.length; i++) {
-            if (i > 0 && i % 8 === 0) {
-                res.push(" ")
+        const inArr = inputBin.split(" ")
+        const keyArr = keyBin.split(" ")
+        const outArr = inArr.map((x, i) => {
+            if (i < keyArr.length) {
+                let xor = parseInt(x, 2) ^ parseInt(keyArr[i], 2)
+                xor = xor.toString(2)
+                return padWithZeros(xor)
             }
-            res.push(arr[i])
-        }
-        setOutputBin(res.join(""))
+        })
+        setOutputBin(outArr.join(" "))
+        setOutput(binToStr(outArr.join(" ")))
+    }
+
+    const binToStr = (bin) => {
+        const arr = bin.split(" ")
+        const res = arr.map((x) => {
+            const ascii = parseInt(x, 2)
+            const char = String.fromCharCode(ascii)
+            return char
+        })
+        return res.join("")
+
     }
 
     return (
@@ -155,6 +163,7 @@ export default function XORCell() {
                 <input
                     type="text"
                     value={output}
+                    onChange={() => { }}
                     style={{
                         border: "1px solid black",
                         width: "20em",

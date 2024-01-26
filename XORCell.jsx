@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useEffect, useState } from "react"
 
 function padWithZeros(bin) {
     let padding = ""
@@ -23,6 +23,10 @@ export default function XORCell() {
 
     const [output, setOutput] = useState("")
     const [outputBin, setOutputBin] = useState(strToBin(output))
+
+    useEffect(() => {
+        calculate(inputBin, keyBin)
+    }, [])
 
 
     const handleInputChange = ({ target }) => {

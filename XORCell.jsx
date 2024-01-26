@@ -163,6 +163,7 @@ export default function XORCell() {
                 <input
                     type="text"
                     value={output}
+                    disabled={true}
                     onChange={() => { }}
                     style={{
                         border: "1px solid black",

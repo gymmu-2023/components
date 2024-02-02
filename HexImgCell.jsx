@@ -3,23 +3,14 @@ import MonacoEditor from "react-monaco-editor"
 import { hexy } from "hexy"
 
 export default function HexImgCell() {
-    const [hex, setHex] = useState("abcdef")
-    const [format, setFormat] = useState({
-        width: 2,
-        numbering: "none",
-        format: "twos",
-        radix: 2
-    }
-
-    )
+    const [hex, setHex] = useState("FF 00 00 FF")
 
     const outputRef = useRef(null)
-    const editorRef = useRef(null)
 
-    const setRadix = (value) => {
-        setFormat(prev => ({ ...prev, radix: value }))
+    useEffect(() => {
+        handleEditorChange(hex)
+    }, [hex])
 
-    }
     const handleEditorChange = (value) => {
 
         const ctx = outputRef.current.getContext("2d")
@@ -33,16 +24,12 @@ export default function HexImgCell() {
             return false
         })
 
-        console.log(filterValue)
-
         const filterStr = filterValue.map((c, i) => {
             if (i % 2 === 1) {
                 return c.toUpperCase() + " "
             }
             return c.toUpperCase()
         }).join("")
-
-        console.log(filterStr)
 
         if (value.length === 0) {
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
@@ -60,8 +47,6 @@ export default function HexImgCell() {
             const num = parseInt(hexArr[i], 16) 
             buffer[i] = isNaN(num) ? 255 : num
         }
-
-        console.log(buffer)
 
         // Berechne aus der Länge der Eingabe, wie gross das Bild sein wird
         const width = Math.ceil(Math.sqrt(numPixels))
@@ -99,10 +84,6 @@ export default function HexImgCell() {
                 justifyContent: "center",
                 gap: "1rem"
             }}>
-                <button onClick={() => setRadix(2)}>Binary</button>
-                <button onClick={() => setRadix(8)}>Octal</button>
-                <button onClick={() => setRadix(10)}>Decimal</button>
-                <button onClick={() => setRadix(16)}>Hexadecimal</button>
             </div>
 
             <div

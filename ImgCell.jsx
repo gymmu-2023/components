@@ -3,22 +3,13 @@ import MonacoEditor from "react-monaco-editor"
 import { hexy } from "hexy"
 
 export default function ImgCell() {
-    const [hex, setHex] = useState("abcdef")
-    const [format, setFormat] = useState({
-        width: 2,
-        numbering: "none",
-        format: "twos",
-        radix: 2
-    }
-
-    )
-
+    const [hex, setHex] = useState(" ° °   °°°°°AaA°")
     const outputRef = useRef(null)
 
-    const setRadix = (value) => {
-        setFormat(prev => ({ ...prev, radix: value }))
+    useEffect(() => {
+        handleEditorChange(hex)
+    }, [hex])
 
-    }
     const handleEditorChange = (value) => {
 
         const ctx = outputRef.current.getContext("2d")
@@ -76,10 +67,6 @@ export default function ImgCell() {
                 justifyContent: "center",
                 gap: "1rem"
             }}>
-                <button onClick={() => setRadix(2)}>Binary</button>
-                <button onClick={() => setRadix(8)}>Octal</button>
-                <button onClick={() => setRadix(10)}>Decimal</button>
-                <button onClick={() => setRadix(16)}>Hexadecimal</button>
             </div>
 
             <div

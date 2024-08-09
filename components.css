@@ -1,4 +1,6 @@
-pre { display: inline}
+pre {
+  display: inline;
+}
 
 pre:has(code) {
   display: block;
@@ -24,4 +26,34 @@ pre:has(code) {
 
 .example > h3 {
   margin-bottom: 10px;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.tabs > li {
+  list-style-type: none;
+}
+
+.tabs > li > button {
+  width: 100%;
+  text-align: center;
+  background-color: inherit;
+  border: 5px solid var(--background-color);
+  padding: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.active {
+  border-bottom: 5px solid white !important;
+}
+
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
 }

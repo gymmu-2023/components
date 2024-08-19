@@ -57,3 +57,14 @@ pre:has(code) {
 .hide {
   display: none;
 }
+
+.fiddleContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.fiddleContainer > .output {
+}

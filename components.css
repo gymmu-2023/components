@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 pre {
   display: inline;
 }
@@ -56,4 +60,34 @@ pre:has(code) {
 
 .hide {
   display: none;
+}
+
+.fiddleContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.fiddleContainer .output {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.fiddleContainer .renderOutput {
+  background-color: whitesmoke;
+  color: black;
+  height: 100%;
+}
+
+.fiddleContainer .renderOutput * {
+  padding: 0;
+  margin: 0;
+}
+
+/* Class for small margins */
+.sm {
+  margin: 0.25rem 0;
 }

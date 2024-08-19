@@ -3,9 +3,9 @@ import MonacoEditor from "react-monaco-editor"
 
 import "./components.css"
 
-export default function Fiddle({ fiddleType }) {
-  const [HTMLSource, setHTMLSource] = useState("<h1>Some Title</h1>")
-  const [CSSSource, setCSSSource] = useState("")
+export default function Fiddle({ html, css }) {
+  const [HTMLSource, setHTMLSource] = useState(html || "")
+  const [CSSSource, setCSSSource] = useState(css || "")
   const [source, setSource] = useState("")
 
   useEffect(() => {

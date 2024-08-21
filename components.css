@@ -77,9 +77,10 @@ pre:has(code) {
 }
 
 .fiddleContainer .renderOutput {
+  height: 100%;
   background-color: whitesmoke;
   color: black;
-  height: 100%;
+  max-width: 300px;
 }
 
 .fiddleContainer .renderOutput * {

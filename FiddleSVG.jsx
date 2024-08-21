@@ -25,6 +25,7 @@ export default function FiddleSVG({ svg }) {
               language="xml"
               theme="vs-dark"
               height="300px"
+              automaticLayout="true"
               value={source}
               onChange={handleSVGChange}
             />

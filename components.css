@@ -92,3 +92,16 @@ pre:has(code) {
 .sm {
   margin: 0.25rem 0;
 }
+
+/* Diesen Hack brauchen wir, damit der Monaco-Editor in RevealJS richtig
+angezeigt wird. */
+.monaco-editor {
+  height: 300px !important;
+}
+
+/* Dieser Hack verschiebt den Monaco-Editor an die richtige Stelle in RevealJS
+und ermöglicht das Bearbeiten während der Präsentation. */
+.fiddleContainer section {
+  top: 0 !important;
+  pointer-events: auto !important;
+}

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import MonacoEditor from "react-monaco-editor"
+import Editor from "@monaco-editor/react"
 
 import "./components.css"
 
@@ -16,17 +16,17 @@ export default function FiddleSVG({ svg }) {
         <div>
           <div>
             <h5 className="sm">SVG</h5>
-            <MonacoEditor
+            <Editor
               options={{
                 minimap: {
                   enabled: false,
                 },
               }}
-              language="xml"
+              defaultLanguage="xml"
               theme="vs-dark"
               height="300px"
               automaticLayout="true"
-              value={source}
+              defaultValue={source}
               onChange={handleSVGChange}
             />
           </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import MonacoEditor from "react-monaco-editor"
+import Editor from "@monaco-editor/react"
 
 import "./components.css"
 
@@ -26,19 +26,21 @@ export default function Fiddle({ html, css }) {
         <div>
           <div>
             <h5 className="sm">HTML</h5>
-            <MonacoEditor
+            <Editor
               theme="vs-dark"
               height="300px"
-              value={HTMLSource}
+              defaultLanguage="html"
+              defaultValue={HTMLSource}
               onChange={handleHTMLChange}
             />
           </div>
           <div>
             <h5 className="sm">CSS</h5>
-            <MonacoEditor
+            <Editor
               theme="vs-dark"
               height="300px"
-              value={CSSSource}
+              defaultLanguage="css"
+              defaultValue={CSSSource}
               onChange={handleCSSChange}
             />
           </div>

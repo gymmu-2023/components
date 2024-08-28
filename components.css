@@ -83,6 +83,10 @@ pre:has(code) {
   max-width: 300px;
 }
 
+.fiddleContainer .renderOutput.wide {
+  max-width: 100%;
+}
+
 .fiddleContainer .renderOutput * {
   padding: 0;
   margin: 0;

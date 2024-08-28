@@ -48,7 +48,7 @@ export default function Fiddle({ html, css }) {
         <div className="output">
           <h5 className="sm">Webseite</h5>
           <div
-            className="renderOutput"
+            className="renderOutput wide"
             dangerouslySetInnerHTML={{ __html: source }}></div>
         </div>
       </div>

@@ -11,7 +11,12 @@ const URLComponent = ({ url }) => {
     },
     { label: "Username", value: urlObj.username, separator: ":" },
     { label: "Password", value: urlObj.password, separator: "@" },
-    { label: "Host", value: urlObj.hostname, separator: "/" },
+    {
+      label: "Host",
+      value: urlObj.hostname,
+      separator: urlObj.port ? ":" : "/",
+    },
+    { label: "Port", value: urlObj.port, separator: "/" },
     {
       label: "Pathname",
       value: urlObj.pathname.replace("/", ""),
@@ -21,8 +26,18 @@ const URLComponent = ({ url }) => {
     { label: "Hash", value: urlObj.hash, separator: "" },
   ]
 
-  const colors = ["red", "green", "blue", "orange", "purple"]
-
+  const colors = [
+    "red",
+    "green",
+    "blue",
+    "orange",
+    "purple",
+    "teal",
+    "magenta",
+    "brown",
+    "cyan",
+    "lime",
+  ]
   return (
     <div
       style={{
